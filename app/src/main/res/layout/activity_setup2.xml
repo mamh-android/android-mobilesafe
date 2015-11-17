@@ -1,0 +1,87 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:itheima="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.mamh.mobilesafe.Setup1Activity">
+
+    <TextView
+        android:background="@color/green"
+        android:gravity="center"
+        android:id="@+id/tv_id"
+        android:text="2手机卡绑定"
+        android:textSize="22sp"
+        android:textColor="@color/black"
+        android:layout_width="fill_parent"
+        android:layout_height="55dp" />
+
+    <TextView
+        android:text="通过绑定sim："
+        style="@style/text_content_style" />
+
+
+    <TextView
+        android:text="下次重启手机如果发现sim变化\n就会发送报警短息"
+        style="@style/text_content_style" />
+
+    <com.example.mamh.mobilesafe.ui.SettingItemView
+        itheima:atitle="点击绑定sim卡"
+        itheima:desc_off="未绑定"
+        itheima:desc_on="已绑定"
+        android:id="@+id/siv_bind_sim"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </com.example.mamh.mobilesafe.ui.SettingItemView>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:src="@android:drawable/presence_offline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:src="@android:drawable/presence_online"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:src="@android:drawable/presence_offline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:src="@android:drawable/presence_offline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <ImageView
+            android:layout_centerInParent="true"
+            android:src="@drawable/bind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView" />
+
+        <Button
+            android:id="@+id/bt_prestep2"
+            style="@style/button_pre_style" />
+
+        <Button
+            android:id="@+id/bt_nextstep2"
+            style="@style/button_next_style" />
+    </RelativeLayout>
+
+
+</LinearLayout>

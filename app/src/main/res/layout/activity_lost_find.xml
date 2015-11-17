@@ -1,0 +1,141 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.mamh.mobilesafe.LostFindActivity">
+
+    <TextView
+        android:id="@+id/tv_id"
+        android:layout_width="fill_parent"
+        android:layout_height="55dp"
+        android:background="@color/green"
+        android:gravity="center"
+        android:text="手机防盗"
+        android:textColor="@color/black"
+        android:textSize="22sp" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="8dp"
+            android:text="安全号码："
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="8dp"
+            android:text="" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.2dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/red" />
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="8dp"
+            android:text="防盗保护是否开启："
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/unlock" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.2dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/red" />
+
+    <TextView
+        android:clickable="true"
+        android:background="@drawable/shape_selector"
+        android:id="@+id/tv_reenter_setup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="8dp"
+        android:text="重新进入设置向导"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="0.2dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/red" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="8dp"
+        android:text="功能简介："
+        android:textColor="@color/black"
+        android:textSize="20sp" />
+
+
+    <TextView
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:text="播放报警音乐：#*alarm"
+        style="@style/text_content_style" />
+
+    <TextView
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:text="GPS追踪：#*location"
+        style="@style/text_content_style" />
+
+    <TextView
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:text="远程数据销毁:#*wipedata"
+        style="@style/text_content_style" />
+
+    <TextView
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:text="远程锁屏:#*lockscreen"
+        style="@style/text_content_style" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</LinearLayout>
+

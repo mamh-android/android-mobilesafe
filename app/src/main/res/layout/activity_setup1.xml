@@ -1,0 +1,92 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.mamh.mobilesafe.Setup1Activity">
+
+    <TextView
+        android:background="@color/green"
+        android:gravity="center"
+        android:id="@+id/tv_id"
+        android:text="1欢迎使用"
+        android:textSize="22sp"
+        android:textColor="@color/black"
+        android:layout_width="fill_parent"
+        android:layout_height="55dp" />
+
+    <TextView
+        android:text="你的手机防盗卫士"
+        style="@style/text_content_style" />
+
+    <TextView
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:text="sim卡变更套餐"
+        style="@style/text_content_style" />
+
+    <TextView
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:text="GPS"
+        style="@style/text_content_style" />
+
+    <TextView
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:text="远程数据销毁"
+        style="@style/text_content_style" />
+
+    <TextView
+        android:drawableLeft="@android:drawable/star_big_on"
+        android:text="远程锁屏"
+        style="@style/text_content_style" />
+
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@android:drawable/presence_online"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:src="@android:drawable/presence_offline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:src="@android:drawable/presence_offline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:src="@android:drawable/presence_offline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <ImageView
+            android:layout_centerInParent="true"
+            android:src="@drawable/setup1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView" />
+        <Button
+            android:text="返回"
+            android:id="@+id/bt_prestep1"
+            style="@style/button_pre_style" />
+
+        <Button
+            android:id="@+id/bt_nextstep1"
+            style="@style/button_next_style" />
+    </RelativeLayout>
+
+
+</LinearLayout>
