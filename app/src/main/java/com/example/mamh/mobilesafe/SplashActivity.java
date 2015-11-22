@@ -28,6 +28,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -57,18 +59,18 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        sp=getSharedPreferences("config", MODE_PRIVATE);
+        sp = getSharedPreferences("config", MODE_PRIVATE);
         //设置版本名称
         tv_splash_version = (TextView) findViewById(R.id.tv_splash_version_id);
         tv_splash_version.setText("version: " + getVersionName());
 
-        tv_download_percent= (TextView) findViewById(R.id.tv_splash_download_percent_id);
-
-        boolean update = sp.getBoolean("update",false);
+        tv_download_percent = (TextView) findViewById(R.id.tv_splash_download_percent_id);
+        copyDB();
+        boolean update = sp.getBoolean("update", false);
         //检查升级，连网一般在子线程里做
-        if(update){
+        if (update) {
             checkUpdate();
-        }else {
+        } else {
             checkUpdateHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -80,8 +82,37 @@ public class SplashActivity extends Activity {
         //做一个渐变的效果
         AlphaAnimation animation = new AlphaAnimation(0.3f, 1.0f);
         animation.setDuration(500);//500毫秒
-        RelativeLayout rl_layout= (RelativeLayout) findViewById(R.id.rl_root_spalash_id);
+        RelativeLayout rl_layout = (RelativeLayout) findViewById(R.id.rl_root_spalash_id);
         rl_layout.startAnimation(animation);
+
+    }
+
+    private void copyDB() {
+        try {
+            InputStream is = getResources().openRawResource(R.raw.address);
+            String packageName = getPackageName();
+            String dbpath = "/data/" + Environment.getDataDirectory().getAbsolutePath() + "/" + packageName;
+            dbpath += "/address.db";
+            File file = new File(dbpath);
+            if(file.exists() && file.length()>0){
+                Log.d(TAG, "bu不需要复制啦。。。。");
+                return;
+            }
+            FileOutputStream fos = new FileOutputStream(file);
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            try {
+                while ((len = is.read(buffer)) != -1) {
+                    fos.write(buffer, 0, len);
+                }
+                is.close();
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -126,7 +157,7 @@ public class SplashActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case SHOW_UPDATE_DIALOG:
                     //显示升级对话框
                     showUpdateDialog();
@@ -153,7 +184,7 @@ public class SplashActivity extends Activity {
     }
 
     /**
-     *  显示升级的对话框
+     * 显示升级的对话框
      */
     private void showUpdateDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -175,13 +206,13 @@ public class SplashActivity extends Activity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 //下载apk，并替换
                 String sdState = Environment.getExternalStorageState();
-                if(sdState.equals(Environment.MEDIA_MOUNTED)){
+                if (sdState.equals(Environment.MEDIA_MOUNTED)) {
                     //sd卡存在,面向组件编程
-                    String savepath = Environment.getExternalStorageDirectory().getAbsoluteFile()+"/mobilesafe.apk";
+                    String savepath = Environment.getExternalStorageDirectory().getAbsoluteFile() + "/mobilesafe.apk";
                     FinalHttp finalHttp = new FinalHttp();
-                    finalHttp.download(apkurl, savepath,new DownloadAjaxCallBack());
-                }else{
-                    Toast.makeText(getApplicationContext(),"no sdcard", Toast.LENGTH_SHORT).show();
+                    finalHttp.download(apkurl, savepath, new DownloadAjaxCallBack());
+                } else {
+                    Toast.makeText(getApplicationContext(), "no sdcard", Toast.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -207,14 +238,14 @@ public class SplashActivity extends Activity {
         finish();
     }
 
-    class  DownloadAjaxCallBack extends AjaxCallBack<File>{
+    class DownloadAjaxCallBack extends AjaxCallBack<File> {
         @Override
         public void onLoading(long count, long current) {
             super.onLoading(count, current);
             String download_percent_text = getResources().getString(R.string.splash_download_percent_text);
             long percent = current * 100 / count;
             tv_download_percent.setVisibility(View.VISIBLE);
-            tv_download_percent.setText(download_percent_text+ percent + "%");
+            tv_download_percent.setText(download_percent_text + percent + "%");
         }
 
         @Override
@@ -228,8 +259,9 @@ public class SplashActivity extends Activity {
             super.onFailure(t, errorNo, strMsg);
             Toast.makeText(getApplicationContext(), "Download Fail", Toast.LENGTH_SHORT).show();
         }
+
         private void installApk(File file) {
-            Intent intent=new Intent();
+            Intent intent = new Intent();
             intent.setAction("android.intent.action.VIEEW");
             intent.addCategory("android.intent.category.DEFAULT");
             intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
@@ -286,10 +318,10 @@ public class SplashActivity extends Activity {
                 e.printStackTrace();
             } finally {
                 long endTime = System.currentTimeMillis();
-                long deltaTime = endTime-startTime;
-                if (deltaTime < 2000){
+                long deltaTime = endTime - startTime;
+                if (deltaTime < 2000) {
                     try {
-                        Thread.sleep(2000-deltaTime);
+                        Thread.sleep(2000 - deltaTime);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

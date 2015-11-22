@@ -64,6 +64,9 @@ public class HomeActivity extends Activity {
                         //进入手机防盗
                         showLostFindDialog();
                         break;
+                    case 7:
+                        enterAtoolsActivity();
+                        break;
                     case 8:
                         enterSettingActivity();
                         break;
@@ -72,13 +75,18 @@ public class HomeActivity extends Activity {
         });
     }
 
-    private void enterSettingActivity(){
+    private void enterAtoolsActivity() {
+        Intent intent = new Intent(HomeActivity.this, AtoolsActivity.class);
+        startActivity(intent);
+    }
+
+    private void enterSettingActivity() {
         Log.d(TAG, "进入手机设置页面");
         Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
         startActivity(intent);
     }
 
-    private void enterLostFindActivity(){
+    private void enterLostFindActivity() {
         Log.d(TAG, "进入手机防盗页面");
         Intent intent = new Intent(HomeActivity.this, LostFindActivity.class);
         startActivity(intent);
