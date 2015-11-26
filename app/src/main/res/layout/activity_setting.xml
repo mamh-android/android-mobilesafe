@@ -1,28 +1,33 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:itheima="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_id"
+        android:layout_width="fill_parent"
+        android:layout_height="55dp"
         android:background="@color/green"
         android:gravity="center"
-        android:id="@+id/tv_id"
         android:text="设置中心"
-        android:textSize="22sp"
         android:textColor="@color/black"
-        android:layout_width="fill_parent"
-        android:layout_height="55dp" />
+        android:textSize="22sp" />
 
     <com.example.mamh.mobilesafe.ui.SettingItemView
-        itheima:atitle="设置自动更新"
-        itheima:desc_off = "自动更新：关闭"
-        itheima:desc_on = "自动更新：打开"
         android:id="@+id/siv_update"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        itheima:atitle="设置自动更新"
+        itheima:desc_off="自动更新：关闭"
+        itheima:desc_on="自动更新：打开" />
 
-    </com.example.mamh.mobilesafe.ui.SettingItemView>
+    <com.example.mamh.mobilesafe.ui.SettingItemView
+        android:id="@+id/siv_show_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        itheima:atitle="设置显示号码归属地"
+        itheima:desc_off="显示号码归属地：关闭"
+        itheima:desc_on="显示号码归属地：打开" />
 
 </LinearLayout>
