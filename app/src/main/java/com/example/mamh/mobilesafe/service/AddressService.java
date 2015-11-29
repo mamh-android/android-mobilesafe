@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +33,7 @@ public class AddressService extends Service {
     //窗体管理者
     private WindowManager windowManager;
 
-    private TextView myToastTextView;
+    private View myToastView;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -72,7 +73,9 @@ public class AddressService extends Service {
     }
 
     private void myToast(String address) {
-        myToastTextView = new TextView(this);
+
+        myToastView = View.inflate(this, R.layout.address_show, null);
+        TextView myToastTextView = (TextView) myToastView.findViewById(R.id.tv_address);
         myToastTextView.setText(address);
 
         myToastTextView.setTextSize(22);
@@ -89,7 +92,7 @@ public class AddressService extends Service {
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
 
-        windowManager.addView(myToastTextView, params);//利用wm来添加view
+        windowManager.addView(myToastView, params);//利用wm来添加view
     }
 
     private class MyPhoneStateListener extends PhoneStateListener {
@@ -102,14 +105,14 @@ public class AddressService extends Service {
             switch (state) {
                 case TelephonyManager.CALL_STATE_RINGING:
                     String address = NumberAddressQueryUtils.queryNumber(incomingNumber);
-                    Toast.makeText(AddressService.this, "归属地： " + address, Toast.LENGTH_LONG).show();
+                    myToast(address);
                     break;
                 case TelephonyManager.CALL_STATE_IDLE:
                     //电话空闲的时候把view移除
                     //这就是挂电话。来电拒绝。都会回调这个方法。
-                    if (myToastTextView != null) {
-                        if (myToastTextView.getParent() != null) {
-                            windowManager.removeView(myToastTextView);
+                    if (myToastView != null) {
+                        if (myToastView.getParent() != null) {
+                            windowManager.removeView(myToastView);
                         }
                     }
                     break;
