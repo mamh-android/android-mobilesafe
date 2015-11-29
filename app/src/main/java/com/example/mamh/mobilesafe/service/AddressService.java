@@ -1,7 +1,10 @@
 package com.example.mamh.mobilesafe.service;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -19,6 +22,7 @@ public class AddressService extends Service {
     //<uses-permission android:name="android.permission.READ_PHONE_STATE" />
     private TelephonyManager tm;
     private MyPhoneStateListener myPhoneStateListener;
+    private OutCallReceiver outCallReceiver;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -33,6 +37,12 @@ public class AddressService extends Service {
         myPhoneStateListener = new MyPhoneStateListener();
         tm.listen(myPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         Log.d(TAG, " on create()");
+
+        outCallReceiver = new OutCallReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_NEW_OUTGOING_CALL);
+        //用代码注册广播接收者,有注册就有取消。。。。
+        registerReceiver(outCallReceiver, intentFilter);
     }
 
     @Override
@@ -42,6 +52,11 @@ public class AddressService extends Service {
         tm.listen(myPhoneStateListener, PhoneStateListener.LISTEN_NONE);
         myPhoneStateListener = null;
         Log.d(TAG, " on destroy()");
+
+        //取消广播监听者
+        unregisterReceiver(outCallReceiver);
+        outCallReceiver = null;
+
     }
 
 
@@ -55,7 +70,7 @@ public class AddressService extends Service {
             switch (state) {
                 case TelephonyManager.CALL_STATE_RINGING:
                     String address = NumberAddressQueryUtils.queryNumber(incomingNumber);
-                    Toast.makeText(AddressService.this, "归属地： " + address, Toast.LENGTH_LONG);
+                    Toast.makeText(AddressService.this, "归属地： " + address, Toast.LENGTH_LONG).show();
                     break;
                 case TelephonyManager.CALL_STATE_IDLE:
                     break;
@@ -66,4 +81,15 @@ public class AddressService extends Service {
 
         }
     }
+
+    private class OutCallReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, " on recevie");
+            String outPhone = getResultData();//拨出去的电话号码
+            String address = NumberAddressQueryUtils.queryNumber(outPhone);
+            Toast.makeText(context, "归属地： " + address, Toast.LENGTH_LONG).show();
+        }
+    }
+
 }
