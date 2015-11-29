@@ -30,4 +30,10 @@
         itheima:desc_off="号码归属地显示：关闭"
         itheima:desc_on="号码归属地显示：打开" />
 
+    <com.example.mamh.mobilesafe.ui.SettingClikcView
+        android:id="@+id/scv_changebg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        itheima:atitle="设置归属地显示风格" />
+
 </LinearLayout>

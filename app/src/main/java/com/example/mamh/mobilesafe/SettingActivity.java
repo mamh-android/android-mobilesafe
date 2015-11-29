@@ -1,6 +1,8 @@
 package com.example.mamh.mobilesafe;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.mamh.mobilesafe.service.AddressService;
+import com.example.mamh.mobilesafe.ui.SettingClikcView;
 import com.example.mamh.mobilesafe.ui.SettingItemView;
 import com.example.mamh.mobilesafe.utils.ServiceUtils;
 
@@ -16,6 +19,9 @@ public class SettingActivity extends Activity {
     private static final String TAG = "SettingActivity";
     private SettingItemView siv_update;
     private SettingItemView siv_show_address;
+    private SettingClikcView scv_change_bg;//设置归属地背景
+
+
     private SharedPreferences sp;
     private Intent showAddressIntent;
 
@@ -72,8 +78,34 @@ public class SettingActivity extends Activity {
                 }
             }
         });
+        final String[] items = {
+                "半透明", "活力橙", "卫士蓝", "金属灰", "苹果绿"
+        };
+        final int itemSelected = sp.getInt("which", 0);
+        scv_change_bg = (SettingClikcView) findViewById(R.id.scv_changebg);
+        scv_change_bg.setDescription(items[itemSelected]);
+        scv_change_bg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, " set change background ");
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+                builder.setTitle("归属地提示框风格");
+                final int itemSelected1 = sp.getInt("which", 0);
 
-
+                builder.setSingleChoiceItems(items, itemSelected1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        scv_change_bg.setDescription(items[which]);
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.putInt("which", which);
+                        editor.commit();
+                        dialog.dismiss();
+                    }
+                });
+                builder.setNegativeButton("cancel", null);
+                builder.show();
+            }
+        });
     }
 
     @Override
