@@ -5,12 +5,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mamh.mobilesafe.R;
 import com.example.mamh.mobilesafe.db.dao.NumberAddressQueryUtils;
 
 /**
@@ -23,6 +28,11 @@ public class AddressService extends Service {
     private TelephonyManager tm;
     private MyPhoneStateListener myPhoneStateListener;
     private OutCallReceiver outCallReceiver;
+
+    //窗体管理者
+    private WindowManager windowManager;
+
+    private TextView myToastTextView;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -43,6 +53,8 @@ public class AddressService extends Service {
         intentFilter.addAction(Intent.ACTION_NEW_OUTGOING_CALL);
         //用代码注册广播接收者,有注册就有取消。。。。
         registerReceiver(outCallReceiver, intentFilter);
+
+        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
     }
 
     @Override
@@ -59,6 +71,26 @@ public class AddressService extends Service {
 
     }
 
+    private void myToast(String address) {
+        myToastTextView = new TextView(this);
+        myToastTextView.setText(address);
+
+        myToastTextView.setTextSize(22);
+        myToastTextView.setTextColor(Color.RED);
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.format = PixelFormat.TRANSLUCENT;
+        params.type = WindowManager.LayoutParams.TYPE_TOAST;
+        params.setTitle("Toast");
+        params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+
+        windowManager.addView(myToastTextView, params);//利用wm来添加view
+    }
 
     private class MyPhoneStateListener extends PhoneStateListener {
         @Override
@@ -73,6 +105,13 @@ public class AddressService extends Service {
                     Toast.makeText(AddressService.this, "归属地： " + address, Toast.LENGTH_LONG).show();
                     break;
                 case TelephonyManager.CALL_STATE_IDLE:
+                    //电话空闲的时候把view移除
+                    //这就是挂电话。来电拒绝。都会回调这个方法。
+                    if (myToastTextView != null) {
+                        if (myToastTextView.getParent() != null) {
+                            windowManager.removeView(myToastTextView);
+                        }
+                    }
                     break;
                 default:
                     break;
@@ -88,7 +127,8 @@ public class AddressService extends Service {
             Log.d(TAG, " on recevie");
             String outPhone = getResultData();//拨出去的电话号码
             String address = NumberAddressQueryUtils.queryNumber(outPhone);
-            Toast.makeText(context, "归属地： " + address, Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, "归属地： " + address, Toast.LENGTH_LONG).show();
+            myToast(address);
         }
     }
 
