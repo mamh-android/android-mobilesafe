@@ -17,19 +17,19 @@ public class SettingActivity extends Activity {
     private SettingItemView siv_update;
     private SettingItemView siv_show_address;
     private SharedPreferences sp;
-    private Intent showAddress;
+    private Intent showAddressIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
         sp = getSharedPreferences("config", MODE_PRIVATE);
-        siv_update= (SettingItemView) findViewById(R.id.siv_update);
+        siv_update = (SettingItemView) findViewById(R.id.siv_update);
 
         boolean update = sp.getBoolean("update", false);
-        if (update){
+        if (update) {
             siv_update.setChecked(true);
-        }else {
+        } else {
             siv_update.setChecked(false);
         }
 
@@ -37,46 +37,39 @@ public class SettingActivity extends Activity {
             @Override
             public void onClick(View view) {
                 SharedPreferences.Editor editor = sp.edit();
-                if(siv_update.isChecked()){
+                if (siv_update.isChecked()) {
                     //is checked
                     siv_update.setChecked(false);
-                    editor.putBoolean("update",false);
-                }else{
+                    editor.putBoolean("update", false);
+                } else {
                     //not checked
                     siv_update.setChecked(true);
-                    editor.putBoolean("update",true);
+                    editor.putBoolean("update", true);
                 }
                 editor.commit();
 
             }
         });
 
-        siv_show_address= (SettingItemView) findViewById(R.id.siv_show_address);
-        showAddress = new Intent(this, AddressService.class);
-        boolean show_address = sp.getBoolean("show_address", false);
+        siv_show_address = (SettingItemView) findViewById(R.id.siv_show_address);
+        showAddressIntent = new Intent(this, AddressService.class);
         boolean isServiceRunning = ServiceUtils.isServiceRunning(SettingActivity.this, "com.example.mamh.mobilesafe.service.AddressService");
-        if (show_address){
-            siv_show_address.setChecked(true);
-        }else {
-            siv_show_address.setChecked(false);
-        }
+        Log.d(TAG, " is running = " + isServiceRunning);
+        siv_show_address.setChecked(isServiceRunning);
         siv_show_address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences.Editor editor = sp.edit();
-                if(siv_show_address.isChecked()){
+                if (siv_show_address.isChecked()) {
                     //is checked
                     siv_show_address.setChecked(false);
-                    stopService(showAddress);
-                    editor.putBoolean("show_address",false);
-                }else{
+                    stopService(showAddressIntent);
+                    Log.d(TAG, "                    stopService(showAddressIntent);\n");
+                } else {
                     //not checked
                     siv_show_address.setChecked(true);
-                    startService(showAddress);
-                    Log.d(TAG, "                    startService(showAddress);\n");
-                    editor.putBoolean("show_address",true);
+                    startService(showAddressIntent);
+                    Log.d(TAG, "                    startService(showAddressIntent);\n");
                 }
-                editor.commit();
             }
         });
 
@@ -86,12 +79,8 @@ public class SettingActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        showAddress = new Intent(this, AddressService.class);
-        boolean show_address = sp.getBoolean("show_address", false);
-        if (show_address){
-            siv_show_address.setChecked(true);
-        }else {
-            siv_show_address.setChecked(false);
-        }
+        showAddressIntent = new Intent(this, AddressService.class);
+        boolean isServiceRunning = ServiceUtils.isServiceRunning(SettingActivity.this, "com.example.mamh.mobilesafe.service.AddressService");
+        siv_show_address.setChecked(isServiceRunning);
     }
 }

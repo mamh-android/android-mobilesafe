@@ -26,8 +26,8 @@
         android:id="@+id/siv_show_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        itheima:atitle="设置显示号码归属地"
-        itheima:desc_off="显示号码归属地：关闭"
-        itheima:desc_on="显示号码归属地：打开" />
+        itheima:atitle="开启来电号码归属地显示"
+        itheima:desc_off="号码归属地显示：关闭"
+        itheima:desc_on="号码归属地显示：打开" />
 
 </LinearLayout>
