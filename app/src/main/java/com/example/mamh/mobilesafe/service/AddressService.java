@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
@@ -69,13 +70,24 @@ public class AddressService extends Service {
         //取消广播监听者
         unregisterReceiver(outCallReceiver);
         outCallReceiver = null;
-
+        if (myToastView != null) {
+            if (myToastView.getParent() != null) {
+                windowManager.removeView(myToastView);
+            }
+        }
     }
 
     private void myToast(String address) {
-
+        //                "半透明", "活力橙", "卫士蓝", "金属灰", "苹果绿"
+        int[] ids = {
+                R.drawable.call_locate_white, R.drawable.call_locate_orange,
+                R.drawable.call_locate_blue, R.drawable.call_locate_gray,
+                R.drawable.call_locate_green};
         myToastView = View.inflate(this, R.layout.address_show, null);
         TextView myToastTextView = (TextView) myToastView.findViewById(R.id.tv_address);
+        SharedPreferences sp = getSharedPreferences("config", MODE_PRIVATE);
+        int which = sp.getInt("which", 0);
+        myToastTextView.setBackgroundResource(ids[which]);
         myToastTextView.setText(address);
 
         myToastTextView.setTextSize(22);
