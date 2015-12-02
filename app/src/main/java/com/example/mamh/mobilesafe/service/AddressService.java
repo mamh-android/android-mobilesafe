@@ -9,9 +9,12 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -35,6 +38,9 @@ public class AddressService extends Service {
     private WindowManager windowManager;
 
     private View myToastView;
+    private WindowManager.LayoutParams params;
+    private SharedPreferences sp;
+    long[] mHits = new long[2];
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -78,14 +84,14 @@ public class AddressService extends Service {
     }
 
     private void myToast(String address) {
-        //                "半透明", "活力橙", "卫士蓝", "金属灰", "苹果绿"
+        //"半透明", "活力橙", "卫士蓝", "金属灰", "苹果绿"
         int[] ids = {
                 R.drawable.call_locate_white, R.drawable.call_locate_orange,
                 R.drawable.call_locate_blue, R.drawable.call_locate_gray,
                 R.drawable.call_locate_green};
         myToastView = View.inflate(this, R.layout.address_show, null);
-        TextView myToastTextView = (TextView) myToastView.findViewById(R.id.tv_address);
-        SharedPreferences sp = getSharedPreferences("config", MODE_PRIVATE);
+        final TextView myToastTextView = (TextView) myToastView.findViewById(R.id.tv_address);
+        sp = getSharedPreferences("config", MODE_PRIVATE);
         int which = sp.getInt("which", 0);
         myToastTextView.setBackgroundResource(ids[which]);
         myToastTextView.setText(address);
@@ -93,16 +99,85 @@ public class AddressService extends Service {
         myToastTextView.setTextSize(22);
         myToastTextView.setTextColor(Color.RED);
 
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        params = new WindowManager.LayoutParams();
 
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
-        params.format = PixelFormat.TRANSLUCENT;
-        params.type = WindowManager.LayoutParams.TYPE_TOAST;
+        params.gravity = Gravity.TOP + Gravity.LEFT;
+        params.x = sp.getInt("lastx", 0);
+        params.y = sp.getInt("lasty", 0);
+        //params.type = WindowManager.LayoutParams.TYPE_TOAST;//土司类型，不能响应触摸事件
+        params.type = WindowManager.LayoutParams.TYPE_PRIORITY_PHONE;//添加权限
+
         params.setTitle("Toast");
         params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+
+        myToastView.setOnTouchListener(new View.OnTouchListener() {
+            int startX = 0;
+            int startY = 0;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch ((event.getAction())) {
+                    case MotionEvent.ACTION_DOWN:
+                        startX = (int) event.getRawX();
+                        startY = (int) event.getRawY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        float newX = event.getRawX();
+                        float newY = event.getRawY();
+                        float dx = newX - startX;
+                        float dy = newY - startY;
+                        //如何更新view在屏幕上的位置
+                        params.x += dx;
+                        params.y += dy;
+                        //考虑边界问题
+                        if (params.x < 0) params.x = 0;
+                        if (params.y < 0) params.y = 0;
+                        if (params.x > windowManager.getDefaultDisplay().getWidth() - myToastView.getWidth()) {
+                            params.x = windowManager.getDefaultDisplay().getWidth() - myToastView.getWidth();
+                        }
+                        if (params.y > windowManager.getDefaultDisplay().getHeight() - myToastView.getHeight()) {
+                            params.y = windowManager.getDefaultDisplay().getHeight() - myToastView.getHeight();
+                        }
+                        windowManager.updateViewLayout(myToastView, params);
+
+                        startX = (int) event.getRawX();
+                        startY = (int) event.getRawY();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.putInt("lastx", params.x);
+                        editor.putInt("lastx", params.x);
+                        editor.commit();
+                        break;
+                }
+                return false;// 表示事件没有处理晚
+                //return true;//这里返回true，click事件就不会响应了
+
+            }
+        });
+
+        myToastView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
+                mHits[mHits.length - 1] = SystemClock.uptimeMillis();
+                if (mHits[0] >= (SystemClock.uptimeMillis() - 500)) {
+                    Log.e(TAG, " double click");
+                    if (myToastView != null) {
+                        if (myToastView.getParent() != null) {
+                            windowManager.removeView(myToastView);
+                        }
+                    }
+                }
+
+            }
+        });
+
 
         windowManager.addView(myToastView, params);//利用wm来添加view
     }
