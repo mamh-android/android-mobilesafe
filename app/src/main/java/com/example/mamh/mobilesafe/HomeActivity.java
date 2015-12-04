@@ -64,6 +64,9 @@ public class HomeActivity extends Activity {
                         //进入手机防盗
                         showLostFindDialog();
                         break;
+                    case 1:
+                        enterCallSmsActivity();
+                        break;
                     case 7:
                         enterAtoolsActivity();
                         break;
@@ -73,6 +76,11 @@ public class HomeActivity extends Activity {
                 }
             }
         });
+    }
+
+    private void enterCallSmsActivity() {
+        Intent intent = new Intent(HomeActivity.this, CallSmsSafeActivity.class);
+        startActivity(intent);
     }
 
     private void enterAtoolsActivity() {
