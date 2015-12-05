@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.mamh.mobilesafe.db.BlackNumberDBOPenHelper;
+import com.example.mamh.mobilesafe.domain.BlackNumberInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mamh on 15-12-2.
@@ -50,5 +54,19 @@ public class BlackNumberDao {
         SQLiteDatabase db = helper.getReadableDatabase();
         db.delete("blacknumber", "number= ? ", new String[]{number});
         db.close();
+    }
+
+    public List<BlackNumberInfo> find(){
+        List<BlackNumberInfo> list = new ArrayList<BlackNumberInfo>();
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select number,mode from number", null);
+        while (cursor.moveToNext()){
+            String number = cursor.getString(0);
+            String mode = cursor.getString(1);
+            BlackNumberInfo info =new BlackNumberInfo(number,mode );
+            list.add(info);
+        }
+        cursor.close();
+        return list;
     }
 }
