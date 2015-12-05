@@ -1,4 +1,4 @@
-package com.example.mamh.mobilesafe;
+package com.example.mamh.mobilesafe.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mamh.mobilesafe.R;
 import com.example.mamh.mobilesafe.utils.Utils;
 
 import net.tsz.afinal.FinalHttp;

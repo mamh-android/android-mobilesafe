@@ -1,13 +1,11 @@
-package com.example.mamh.mobilesafe;
+package com.example.mamh.mobilesafe.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.mamh.mobilesafe.R;
 
 
 public class Setup1Activity extends BaseSetupActivity {

@@ -1,6 +1,5 @@
-package com.example.mamh.mobilesafe;
+package com.example.mamh.mobilesafe.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,11 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.mamh.mobilesafe.R;
 import com.example.mamh.mobilesafe.ui.SettingItemView;
-
-import org.w3c.dom.Text;
-
-import static android.widget.Toast.LENGTH_LONG;
 
 
 public class Setup2Activity extends BaseSetupActivity{

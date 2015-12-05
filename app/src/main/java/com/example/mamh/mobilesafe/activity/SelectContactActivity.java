@@ -1,4 +1,4 @@
-package com.example.mamh.mobilesafe;
+package com.example.mamh.mobilesafe.activity;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+
+import com.example.mamh.mobilesafe.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

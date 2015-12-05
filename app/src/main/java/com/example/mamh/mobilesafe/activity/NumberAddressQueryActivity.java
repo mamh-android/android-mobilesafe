@@ -1,4 +1,4 @@
-package com.example.mamh.mobilesafe;
+package com.example.mamh.mobilesafe.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mamh.mobilesafe.R;
 import com.example.mamh.mobilesafe.db.dao.NumberAddressQueryUtils;
 
 public class NumberAddressQueryActivity extends Activity {

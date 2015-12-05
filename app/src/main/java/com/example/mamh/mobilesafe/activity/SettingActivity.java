@@ -1,4 +1,4 @@
-package com.example.mamh.mobilesafe;
+package com.example.mamh.mobilesafe.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.mamh.mobilesafe.R;
 import com.example.mamh.mobilesafe.service.AddressService;
 import com.example.mamh.mobilesafe.ui.SettingClikcView;
 import com.example.mamh.mobilesafe.ui.SettingItemView;

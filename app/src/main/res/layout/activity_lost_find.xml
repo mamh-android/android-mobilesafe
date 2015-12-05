@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.mamh.mobilesafe.LostFindActivity">
+    tools:context="com.example.mamh.mobilesafe.activity.LostFindActivity">
 
     <TextView
         android:id="@+id/tv_id"

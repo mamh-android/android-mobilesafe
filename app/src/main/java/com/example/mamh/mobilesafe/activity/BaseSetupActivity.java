@@ -1,4 +1,4 @@
-package com.example.mamh.mobilesafe;
+package com.example.mamh.mobilesafe.activity;
 
 import android.app.Activity;
 import android.content.SharedPreferences;

@@ -1,7 +1,9 @@
-package com.example.mamh.mobilesafe;
+package com.example.mamh.mobilesafe.activity;
 
 import android.os.Bundle;
 import android.app.Activity;
+
+import com.example.mamh.mobilesafe.R;
 
 public class CallSmsSafeActivity extends Activity {
 

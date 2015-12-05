@@ -39,7 +39,7 @@
         <service android:name=".service.GPSService" />
         <service android:name=".service.AddressService" />
 
-        <activity android:name=".SplashActivity" >
+        <activity android:name=".activity.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,37 +47,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name=".activity.HomeActivity"
             android:label="HomeActivity" />
         <activity
-            android:name=".SettingActivity"
+            android:name=".activity.SettingActivity"
             android:label="@string/title_activity_setting" />
         <activity
-            android:name=".LostFindActivity"
+            android:name=".activity.LostFindActivity"
             android:label="@string/title_activity_lost_find" />
         <activity
-            android:name=".Setup1Activity"
+            android:name=".activity.Setup1Activity"
             android:label="@string/title_activity_setup1" />
         <activity
-            android:name=".Setup2Activity"
+            android:name=".activity.Setup2Activity"
             android:label="@string/title_activity_setup2" />
         <activity
-            android:name=".Setup3Activity"
+            android:name=".activity.Setup3Activity"
             android:label="@string/title_activity_setup3" />
         <activity
-            android:name=".Setup4Activity"
+            android:name=".activity.Setup4Activity"
             android:label="@string/title_activity_setup4" />
         <activity
-            android:name=".SelectContactActivity"
+            android:name=".activity.SelectContactActivity"
             android:label="@string/title_activity_select_contact" />
         <activity
-            android:name=".AtoolsActivity"
+            android:name=".activity.AtoolsActivity"
             android:label="@string/title_activity_atools" />
         <activity
-            android:name=".NumberAddressQueryActivity"
+            android:name=".activity.NumberAddressQueryActivity"
             android:label="@string/title_activity_number_address_query" />
         <activity
-            android:name=".CallSmsSafeActivity"
+            android:name=".activity.CallSmsSafeActivity"
             android:label="@string/title_activity_call_sms_safe" >
         </activity>
     </application>

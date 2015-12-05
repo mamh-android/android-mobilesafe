@@ -1,11 +1,12 @@
-package com.example.mamh.mobilesafe;
+package com.example.mamh.mobilesafe.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.mamh.mobilesafe.R;
 
 public class AtoolsActivity extends Activity {
 
