@@ -23,7 +23,7 @@ public class BlackNumberDBOPenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = "create table blacknumber(" +
-                "_id integer primary key autoincreament," +
+                "_id integer primary key autoincrement," +
                 "number varchar(20)," +
                 "mode varchar(2)" +
                 ")";
