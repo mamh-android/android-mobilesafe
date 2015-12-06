@@ -85,7 +85,7 @@ public class CallSmsSafeActivity extends Activity {
     }
 
     //记录view的内存地址
-    private class ViewHolder {
+    static private class ViewHolder {
         public TextView tv_black_number;
         public TextView tv_mode;
     }
