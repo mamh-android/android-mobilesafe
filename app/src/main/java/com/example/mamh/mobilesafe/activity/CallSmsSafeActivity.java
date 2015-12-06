@@ -53,7 +53,13 @@ public class CallSmsSafeActivity extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view = View.inflate(getApplicationContext(), R.layout.list_item, null);
+            //这个回去读取流xml文件，然后去解析，最后才生成我们需要的view，这样很消耗资源的。怎么优化？？？
+            View view;
+            if (convertView == null) {
+                view = View.inflate(getApplicationContext(), R.layout.list_item, null);
+            } else {
+                view = convertView;
+            }
             TextView tv_black_number = (TextView) view.findViewById(R.id.tv_black_number);
             TextView tv_mode = (TextView) view.findViewById(R.id.tv_mode);
             tv_black_number.setText(infos.get(position).getNumber());
