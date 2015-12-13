@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="#adc123">
 
     <TextView
         android:id="@+id/tv_black_number"
@@ -17,10 +18,15 @@
         android:id="@+id/tv_mode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_black_number"
+        android:layout_below="@+id/tv_black_number"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="3dp"
-        android:textColor="#88000000"
-        android:text="拦截模式" />
+        android:text="拦截模式"
+        android:textColor="#88000000" />
 
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/app" />
 </RelativeLayout>

@@ -1,12 +1,20 @@
 package com.example.mamh.mobilesafe.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mamh.mobilesafe.R;
 import com.example.mamh.mobilesafe.db.dao.BlackNumberDao;
@@ -19,11 +27,21 @@ public class CallSmsSafeActivity extends Activity {
     private ListView lv_callsms_safe;
     private List<BlackNumberInfo> infos;
     private BlackNumberDao dao;
+    private Button add;
+    private Context mContext;
 
+    private EditText et_blackNumber;
+    private CheckBox cb_phone;
+    private CheckBox cb_sms;
+    private Button bt_ok;
+    private Button bt_cancel;
+
+    private CallSmsAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         setContentView(R.layout.activity_call_sms_safe);
 
         lv_callsms_safe = (ListView) findViewById(R.id.lv_call_sms_safe);
@@ -31,8 +49,59 @@ public class CallSmsSafeActivity extends Activity {
 
         infos = dao.find();
 
-        CallSmsAdapter adapter = new CallSmsAdapter();
+        adapter = new CallSmsAdapter();
         lv_callsms_safe.setAdapter(adapter);
+
+        add = (Button) findViewById(R.id.btn_add);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                final AlertDialog dialog = builder.create();
+                View contentView = View.inflate(mContext, R.layout.dialog_add_blacknumber, null);
+                et_blackNumber = (EditText) contentView.findViewById(R.id.et_phone);
+                cb_phone = (CheckBox) contentView.findViewById(R.id.cb_phone);
+                cb_sms = (CheckBox) contentView.findViewById(R.id.cb_sms);
+                bt_ok = (Button) contentView.findViewById(R.id.bt_ok);
+                bt_cancel = (Button) contentView.findViewById(R.id.bt_cancel);
+                dialog.setView(contentView, 0, 0, 0, 0);
+                bt_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                bt_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String blackNumber = et_blackNumber.getText().toString();
+                        if (TextUtils.isEmpty(blackNumber)) {
+                            Toast.makeText(mContext, "不能为空", Toast.LENGTH_LONG).show();
+                        }
+                        String mode = "";
+                        if (cb_phone.isChecked() && cb_sms.isChecked()) {
+                            //all
+                            mode = "3";
+                        } else if (cb_phone.isChecked()) {
+                            //
+                            mode = "1";
+                        } else if (cb_sms.isChecked()) {
+                            mode = "2";
+                        } else {
+                            Toast.makeText(mContext, "请选择拦截模式", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        dao.add(blackNumber, mode);
+                        dialog.dismiss();
+
+                        //更新listview的内容
+                        infos.add(0,new BlackNumberInfo(blackNumber, mode));
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                dialog.show();
+            }
+        });
     }
 
     private class CallSmsAdapter extends BaseAdapter {
