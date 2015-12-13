@@ -92,11 +92,12 @@ public class CallSmsSafeActivity extends Activity {
                             return;
                         }
                         dao.add(blackNumber, mode);
-                        dialog.dismiss();
-
                         //更新listview的内容
-                        infos.add(0,new BlackNumberInfo(blackNumber, mode));
+                        //在list里添加到第一个位置上
+                        infos.add(0, new BlackNumberInfo(blackNumber, mode));//新添加的显示在上面
                         adapter.notifyDataSetChanged();
+
+                        dialog.dismiss();
                     }
                 });
                 dialog.show();

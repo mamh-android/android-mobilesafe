@@ -59,7 +59,7 @@ public class BlackNumberDao {
     public List<BlackNumberInfo> find(){
         List<BlackNumberInfo> list = new ArrayList<BlackNumberInfo>();
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select number,mode from blacknumber", null);
+        Cursor cursor = db.rawQuery("select number,mode from blacknumber order by _id desc", null);
         while (cursor.moveToNext()){
             String number = cursor.getString(0);
             String mode = cursor.getString(1);
