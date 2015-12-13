@@ -3,15 +3,18 @@ package com.example.mamh.mobilesafe.activity;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,6 +54,7 @@ public class CallSmsSafeActivity extends Activity {
 
         adapter = new CallSmsAdapter();
         lv_callsms_safe.setAdapter(adapter);
+
 
         add = (Button) findViewById(R.id.btn_add);
         add.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +126,7 @@ public class CallSmsSafeActivity extends Activity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             ViewHolder holder;
             //这个回去读取流xml文件，然后去解析，最后才生成我们需要的view，这样很消耗资源的。怎么优化？？？
             View view;
@@ -132,7 +136,7 @@ public class CallSmsSafeActivity extends Activity {
                 holder = new ViewHolder();
                 holder.tv_black_number = (TextView) view.findViewById(R.id.tv_black_number);
                 holder.tv_mode = (TextView) view.findViewById(R.id.tv_mode);
-
+                holder.delete = (ImageView) view.findViewById(R.id.delete);
                 // 把子view的引用放到父view对象里
                 view.setTag(holder);
             } else {
@@ -149,7 +153,37 @@ public class CallSmsSafeActivity extends Activity {
                 holder.tv_mode.setText("短息拦截");
             } else {
                 holder.tv_mode.setText("其他拦截");
+
+
             }
+
+            holder.delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(CallSmsSafeActivity.this);
+                    builder.setTitle(" delete ");
+                    builder.setMessage(" 是否要删除： ");
+                    builder.setPositiveButton("delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dao.delete(infos.get(position).getNumber());
+                            infos.remove(position);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                    builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    builder.show();
+
+                    Log.e(TAG, " delete onclick");
+
+
+                }
+            });
+
             return view;
         }
     }
@@ -158,6 +192,7 @@ public class CallSmsSafeActivity extends Activity {
     static private class ViewHolder {
         public TextView tv_black_number;
         public TextView tv_mode;
+        public ImageView delete;
     }
 
 }
