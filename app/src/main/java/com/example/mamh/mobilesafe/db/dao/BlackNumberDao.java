@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class BlackNumberDao {
     private BlackNumberDBOPenHelper helper;
+    private static final String TABLE_NAME = "blacknumber";
 
     public BlackNumberDao(Context context) {
         this.helper = new BlackNumberDBOPenHelper(context);
@@ -24,12 +25,25 @@ public class BlackNumberDao {
 
     public boolean find(String number) {
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("select * from number where number = ?", new String[]{number});
+        Cursor cursor = db.rawQuery("select * from blacknumber where number = ?", new String[]{number});
         boolean result = false;
         if (cursor.moveToNext()) {
             result = true;
         }
         cursor.close();
+        db.close();
+        return result;
+    }
+
+    public String findMode(String number) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("select mode from blacknumber where number = ?", new String[]{number});
+        String result = "";
+        if (cursor.moveToNext()) {
+            result = cursor.getString(0);
+        }
+        cursor.close();
+        db.close();
         return result;
     }
 
@@ -56,14 +70,14 @@ public class BlackNumberDao {
         db.close();
     }
 
-    public List<BlackNumberInfo> find(){
+    public List<BlackNumberInfo> find() {
         List<BlackNumberInfo> list = new ArrayList<BlackNumberInfo>();
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = db.rawQuery("select number,mode from blacknumber order by _id desc", null);
-        while (cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             String number = cursor.getString(0);
             String mode = cursor.getString(1);
-            BlackNumberInfo info =new BlackNumberInfo(number,mode );
+            BlackNumberInfo info = new BlackNumberInfo(number, mode);
             list.add(info);
         }
         cursor.close();

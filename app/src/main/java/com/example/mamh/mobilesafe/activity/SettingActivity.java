@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.example.mamh.mobilesafe.R;
 import com.example.mamh.mobilesafe.service.AddressService;
+import com.example.mamh.mobilesafe.service.CallSmsSafeService;
 import com.example.mamh.mobilesafe.ui.SettingClikcView;
 import com.example.mamh.mobilesafe.ui.SettingItemView;
 import com.example.mamh.mobilesafe.utils.ServiceUtils;
@@ -21,10 +22,11 @@ public class SettingActivity extends Activity {
     private SettingItemView siv_update;
     private SettingItemView siv_show_address;
     private SettingClikcView scv_change_bg;//设置归属地背景
-
+    private SettingItemView siv_callsms_safe;//短息拦截设置
 
     private SharedPreferences sp;
     private Intent showAddressIntent;
+    private Intent callSmsSafeIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,8 @@ public class SettingActivity extends Activity {
                 }
             }
         });
+
+
         final String[] items = {
                 "半透明", "活力橙", "卫士蓝", "金属灰", "苹果绿"
         };
@@ -107,6 +111,23 @@ public class SettingActivity extends Activity {
                 builder.show();
             }
         });
+
+        siv_callsms_safe = (SettingItemView) findViewById(R.id.siv_callsms_safe);
+        callSmsSafeIntent = new Intent(this, CallSmsSafeService.class);
+        siv_callsms_safe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (siv_callsms_safe.isChecked()) {
+                    //is checked
+                    siv_callsms_safe.setChecked(false);
+                    stopService(callSmsSafeIntent);
+                } else {
+                    //not checked
+                    siv_callsms_safe.setChecked(true);
+                    startService(callSmsSafeIntent);
+                }
+            }
+        });
     }
 
     @Override
@@ -115,5 +136,9 @@ public class SettingActivity extends Activity {
         showAddressIntent = new Intent(this, AddressService.class);
         boolean isServiceRunning = ServiceUtils.isServiceRunning(SettingActivity.this, "com.example.mamh.mobilesafe.service.AddressService");
         siv_show_address.setChecked(isServiceRunning);
+
+        callSmsSafeIntent = new Intent(this, CallSmsSafeService.class);
+        isServiceRunning = ServiceUtils.isServiceRunning(SettingActivity.this, "com.example.mamh.mobilesafe.service.CallSmsSafeService");
+        siv_callsms_safe.setChecked(isServiceRunning);
     }
 }

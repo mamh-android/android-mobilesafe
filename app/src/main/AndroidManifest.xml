@@ -80,6 +80,12 @@
             android:name=".activity.CallSmsSafeActivity"
             android:label="@string/title_activity_call_sms_safe" >
         </activity>
+
+        <service
+            android:name=".service.CallSmsSafeService"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>

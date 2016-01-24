@@ -63,18 +63,24 @@ public class CallSmsSafeActivity extends Activity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 final AlertDialog dialog = builder.create();
                 View contentView = View.inflate(mContext, R.layout.dialog_add_blacknumber, null);
+
                 et_blackNumber = (EditText) contentView.findViewById(R.id.et_phone);
                 cb_phone = (CheckBox) contentView.findViewById(R.id.cb_phone);
                 cb_sms = (CheckBox) contentView.findViewById(R.id.cb_sms);
                 bt_ok = (Button) contentView.findViewById(R.id.bt_ok);
                 bt_cancel = (Button) contentView.findViewById(R.id.bt_cancel);
+
+
                 dialog.setView(contentView, 0, 0, 0, 0);
+
                 bt_cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
                     }
                 });
+
+
                 bt_ok.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
