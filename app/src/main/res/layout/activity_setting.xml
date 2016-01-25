@@ -34,7 +34,7 @@
         android:id="@+id/siv_callsms_safe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        itheima:atitle="黑名单短息拦截设置"
+        itheima:atitle="黑名单短息电话拦截设置"
         itheima:desc_off="黑名单短息拦截：关闭"
         itheima:desc_on="黑名单短息拦截：打开" />
 
