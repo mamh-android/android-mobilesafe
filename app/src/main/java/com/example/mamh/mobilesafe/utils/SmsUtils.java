@@ -1,10 +1,12 @@
 package com.example.mamh.mobilesafe.utils;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlSerializer;
@@ -56,6 +58,9 @@ public class SmsUtils {
 
         callBack.beforeBackup(cursor.getCount());
 
+        //添加一个属性 最大短信条数 max
+        serializer.attribute(null, "max", cursor.getCount() + "");
+
         int process = 0;
         while (cursor.moveToNext()) {
             serializer.startTag(null, "sms");
@@ -90,5 +95,26 @@ public class SmsUtils {
         serializer.endTag(null, "smss");
         serializer.endDocument();
         fileOutputStream.close();
+    }
+
+    /**
+     * @param context
+     */
+    public static void restoreSms(Context context) {
+        Log.e("xxxxx", " smsRestore ");
+        //读取xml文件
+        Xml.newPullParser();
+
+        //把读取的短息 body， date，type，address
+
+        //把短息插入到系统短信应用中
+        Uri uri = Uri.parse("content://sms/");
+        ContentValues values = new ContentValues();
+        values.put("body", "bodyxxxxxxxxxxxxxxxxxxxxxxxxx");
+        values.put("date", "1454138684879");
+        values.put("type", "1");
+        values.put("address", "1231");
+        context.getContentResolver().insert(uri, values);
+
     }
 }

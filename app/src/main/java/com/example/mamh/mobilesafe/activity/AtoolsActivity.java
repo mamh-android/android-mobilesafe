@@ -3,6 +3,7 @@ package com.example.mamh.mobilesafe.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -41,9 +42,16 @@ public class AtoolsActivity extends Activity {
         smsRestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Log.e(TAG, " smsRestore ");
+                smsRestore();
             }
         });
+    }
+
+    //短息的还原
+    private void smsRestore() {
+        Log.e(TAG, " smsRestore ");
+        SmsUtils.restoreSms(this);
     }
 
     private void smsBackup() {
