@@ -2,10 +2,16 @@ package com.example.mamh.mobilesafe.service;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObservable;
+import android.database.ContentObserver;
+import android.net.Uri;
+import android.os.Handler;
 import android.os.IBinder;
+import android.provider.CallLog;
 import android.telephony.PhoneStateListener;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
@@ -74,8 +80,20 @@ public class CallSmsSafeService extends Service {
                         Log.e(TAG, "电话拦截，这里要挂断电话 ");
 
 
+                        //删除通话记录,需要通过 contentprovider来删除
+                        //利用内容提供者删除其他应用里面的私有数据
+                        //deleteCallLogs(incomingNumber);
+
+                        //呼叫记录uri的路径
+                        Uri uri = Uri.parse("content://call_log/calls");
+                        //其实也可以这样获得 uri = CallLog.Calls.CONTENT_URI;
+                        //观察数据库内容的变化
+                        getContentResolver().registerContentObserver(uri, true, new CallLogContentObserver(incomingNumber, new Handler()));
+                        //注册内容观察应该放在挂断电话的前面
+
+
                         //挂断电话
-                        endCall();
+                        endCall();//这里是在另外一个进程中执行的
                     }
                     break;
             }
@@ -85,6 +103,42 @@ public class CallSmsSafeService extends Service {
             //当呼叫状态发生变化时候调用
         }
 
+    }
+
+    private class CallLogContentObserver extends ContentObserver {
+
+        private final String incomingNumber;
+
+        /**
+         * Creates a content observer.
+         *
+         * @param handler The handler to run {@link #onChange} on, or null if none.
+         */
+        public CallLogContentObserver(String incomingNumber, Handler handler) {
+            super(handler);
+            this.incomingNumber = incomingNumber;
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            //数据库内容发生变化了
+            deleteCallLogs(incomingNumber);
+            getContentResolver().unregisterContentObserver(this);
+            super.onChange(selfChange);//这里父类里面什么都没做
+        }
+    }
+
+    //利用内容提供者来删除通话记录
+    private void deleteCallLogs(String incomingNumber) {
+        ContentResolver resolver = getContentResolver();
+
+        //呼叫记录uri的路径
+        Uri uri = Uri.parse("content://call_log/calls");
+        //其实也可以这样获得 uri = CallLog.Calls.CONTENT_URI;
+        String where = "number = ?";
+        String[] selectionArgs = new String[]{incomingNumber};
+
+        resolver.delete(uri, where, selectionArgs);
     }
 
     private void endCall() {
