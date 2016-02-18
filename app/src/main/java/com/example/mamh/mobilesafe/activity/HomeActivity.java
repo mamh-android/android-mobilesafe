@@ -68,6 +68,9 @@ public class HomeActivity extends Activity {
                     case 1:
                         enterCallSmsActivity();
                         break;
+                    case 2:
+                        enterAppMangerActivity();
+                        break;
                     case 7:
                         enterAtoolsActivity();
                         break;
@@ -77,6 +80,11 @@ public class HomeActivity extends Activity {
                 }
             }
         });
+    }
+
+    private void enterAppMangerActivity() {
+        Intent intent = new Intent(HomeActivity.this, AppManagerActivity.class);
+        startActivity(intent);
     }
 
     private void enterCallSmsActivity() {
