@@ -18,6 +18,7 @@ import com.example.mamh.mobilesafe.R;
 import com.example.mamh.mobilesafe.domain.AppInfo;
 import com.example.mamh.mobilesafe.engine.AppInfoProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppManagerActivity extends Activity {
@@ -30,6 +31,17 @@ public class AppManagerActivity extends Activity {
 
 
     private List<AppInfo> appInfos;
+
+    /**
+     * 用户应用程序
+     */
+    private List<AppInfo> userAppinfos = new ArrayList<>();
+
+    /**
+     * 系统应用程序
+     */
+    private List<AppInfo> systemAppinfos = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +67,15 @@ public class AppManagerActivity extends Activity {
             @Override
             public void run() {
                 appInfos = AppInfoProvider.getAppInfo(AppManagerActivity.this);
+
+                for (AppInfo appInfo : appInfos) {
+                    if (appInfo.isUserApp()) {
+                        userAppinfos.add(appInfo);
+                    } else {
+                        systemAppinfos.add(appInfo);
+                    }
+                }
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -87,7 +108,8 @@ public class AppManagerActivity extends Activity {
 
         @Override
         public int getCount() {
-            return appInfos.size();
+            return userAppinfos.size() + systemAppinfos.size();//这个等同于下面的
+            //return appInfos.size();
         }
 
         @Override
@@ -104,6 +126,16 @@ public class AppManagerActivity extends Activity {
         public View getView(int position, View convertView, ViewGroup parent) {
             View view;
             ViewHolder holder;
+
+            AppInfo appInfo;
+
+            if (position < userAppinfos.size()) {
+                appInfo = userAppinfos.get(position);
+            } else {
+                appInfo = systemAppinfos.get(position - userAppinfos.size());
+            }
+
+
             if (convertView != null) {
                 view = convertView;
                 holder = (ViewHolder) view.getTag();
@@ -116,7 +148,6 @@ public class AppManagerActivity extends Activity {
                 view.setTag(holder);
             }
 
-            AppInfo appInfo = appInfos.get(position);
             holder.iv_icon.setImageDrawable(appInfo.getIcon());
             holder.tv_name.setText(appInfo.getName());
 
