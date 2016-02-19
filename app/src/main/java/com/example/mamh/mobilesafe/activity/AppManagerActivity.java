@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
+import android.support.v4.view.ViewPager;
 import android.text.format.Formatter;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -100,11 +102,33 @@ public class AppManagerActivity extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            TextView tv = new TextView(getApplicationContext());
-            tv.setText(appInfos.get(position).toString());
-            return tv;
+            View view;
+            ViewHolder holder;
+            if (convertView != null) {
+                view = convertView;
+                holder = (ViewHolder) view.getTag();
+            } else {
+                view = View.inflate(getApplicationContext(), R.layout.list_item_appinfo, null);
+                holder = new ViewHolder();
+                holder.tv_name = (TextView) view.findViewById(R.id.tv_app_name);
+                holder.tv_location = (TextView) view.findViewById(R.id.tv_app_location);
+                holder.iv_icon = (ImageView) view.findViewById(R.id.iv_app_icon);
+                view.setTag(holder);
+            }
+
+            AppInfo appInfo = appInfos.get(position);
+            holder.iv_icon.setImageDrawable(appInfo.getIcon());
+            holder.tv_name.setText(appInfo.getName());
+
+            return view;
+
         }
     }
 
+    static class ViewHolder {
+        TextView tv_name;
+        TextView tv_location;
+        ImageView iv_icon;
+    }
 
 }
