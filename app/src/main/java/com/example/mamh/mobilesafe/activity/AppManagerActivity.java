@@ -1,6 +1,7 @@
 package com.example.mamh.mobilesafe.activity;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
@@ -12,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.mamh.mobilesafe.R;
@@ -108,19 +110,12 @@ public class AppManagerActivity extends Activity {
 
         @Override
         public int getCount() {
-            return userAppinfos.size() + systemAppinfos.size();//这个等同于下面的
+            //getcount方法就是控制listview条目的个数的。
+            return userAppinfos.size() + 1 + systemAppinfos.size() + 1;//添加两个文本条目。
+            //return userAppinfos.size() + systemAppinfos.size();//这个等同于下面的
             //return appInfos.size();
         }
 
-        @Override
-        public Object getItem(int position) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return 0;
-        }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -129,14 +124,26 @@ public class AppManagerActivity extends Activity {
 
             AppInfo appInfo;
 
-            if (position < userAppinfos.size()) {
-                appInfo = userAppinfos.get(position);
+            if (position == 0) {
+                TextView tv = new TextView(getApplicationContext());
+                tv.setTextColor(Color.GRAY);
+                tv.setBackgroundColor(Color.RED);
+                tv.setText("用户应用程序有： " + userAppinfos.size() + " 个");
+                return tv;//直接返回这个tv对象
+            } else if (position == userAppinfos.size() + 1) {
+                TextView tv = new TextView(getApplicationContext());
+                tv.setTextColor(Color.GRAY);
+                tv.setBackgroundColor(Color.GREEN);
+                tv.setText("系统应用程序有： " + systemAppinfos.size() + " 个");
+                return tv;//直接返回这个tv对象
+            } else if (position <= userAppinfos.size()) {
+                //这一部分显示用户程序
+                appInfo = userAppinfos.get(position - 1);
             } else {
-                appInfo = systemAppinfos.get(position - userAppinfos.size());
+                appInfo = systemAppinfos.get(position - 1 - userAppinfos.size() - 1);
             }
 
-
-            if (convertView != null) {
+            if (convertView != null && convertView instanceof RelativeLayout) {
                 view = convertView;
                 holder = (ViewHolder) view.getTag();
             } else {
@@ -154,6 +161,17 @@ public class AppManagerActivity extends Activity {
             holder.tv_location.setText(appInfo.getInstalledAddress());
             return view;
 
+        }
+
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
         }
     }
 
