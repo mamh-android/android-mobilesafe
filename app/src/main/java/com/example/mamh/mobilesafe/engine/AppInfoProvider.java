@@ -1,6 +1,7 @@
 package com.example.mamh.mobilesafe.engine;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -30,7 +31,25 @@ public class AppInfoProvider {
             String packName = packageInfo.packageName;
             Drawable icon = packageInfo.applicationInfo.loadIcon(pm);
             String name = packageInfo.applicationInfo.loadLabel(pm).toString();
+
+            int flags = packageInfo.applicationInfo.flags;
+
             AppInfo appInfo = new AppInfo(icon, name, packName);
+
+            if ((flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                //用户程序
+                appInfo.setIsUserApp(true);
+            } else {
+                //系统程序
+                appInfo.setIsUserApp(false);
+            }
+            if ((flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) == 0) {
+                //安装在内存中
+                appInfo.setInstalledAddress("内存");
+            } else {
+                //安装在外存
+                appInfo.setInstalledAddress("sd");
+            }
             appInfos.add(appInfo);
         }
 

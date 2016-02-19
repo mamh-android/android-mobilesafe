@@ -120,6 +120,7 @@ public class AppManagerActivity extends Activity {
             holder.iv_icon.setImageDrawable(appInfo.getIcon());
             holder.tv_name.setText(appInfo.getName());
 
+            holder.tv_location.setText(appInfo.getInstalledAddress());
             return view;
 
         }
